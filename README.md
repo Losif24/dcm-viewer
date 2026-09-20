@@ -9,7 +9,7 @@
 
 <table>
   <tr>
-    <td width="50%"><img src="packaging/escaparate/visor.png" alt="Visor con un CBCT dental"><p align="center"><sub><b>Un CBCT dental de 356 cortes</b></sub></p></td>
+    <td width="50%"><img src="packaging/escaparate/visor.png" alt="Visor con un fantoma Shepp-Logan"><p align="center"><sub><b>Recorriendo un estudio de 140 cortes</b></sub></p></td>
     <td width="50%"><img src="packaging/escaparate/registro.png" alt="Registro de estudios"><p align="center"><sub><b>Registro de estudios</b></sub></p></td>
   </tr>
   <tr>
