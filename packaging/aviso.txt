@@ -7,8 +7,12 @@ Python ni ninguna otra cosa en el equipo.
 
 PRIVACIDAD
 
-  * No envia nada por la red. Ni telemetria, ni informes de error, ni
-    actualizaciones automaticas. El programa no abre una sola conexion.
+  * No envia nada por la red: ni telemetria, ni informes de error, ni
+    analitica.
+
+  * Puede avisar de versiones nuevas, pero viene APAGADO. Si lo enciende,
+    lo unico que hace es preguntar a GitHub cual es la ultima version
+    publicada; no manda ningun dato suyo.
 
   * Las imagenes no se copian a ningun sitio. Se leen de la carpeta que
     usted abre y se quedan ahi.

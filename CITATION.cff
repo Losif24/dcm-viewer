@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+title: DCM Viewer
+message: Si usas este programa en un trabajo publicado, puedes citarlo asi.
+type: software
+authors:
+  - given-names: Jose
+    family-names: Duran
+    alias: Losif24
+repository-code: https://github.com/Losif24/dcm-viewer
+url: https://github.com/Losif24/dcm-viewer
+abstract: >-
+  Visor de estudios DICOM para Windows: ordena los cortes por su posicion
+  anatomica real, ajusta ventana y nivel, mide Hounsfield, reproduce en cine y
+  exporta la secuencia a PNG, GIF o MP4. Funciona sin red y sin dependencias.
+keywords:
+  - DICOM
+  - medical imaging
+  - radiology
+  - CBCT
+  - computed tomography
+  - viewer
+license: MIT
+version: 1.1.0
+date-released: '2026-09-19'

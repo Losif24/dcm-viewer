@@ -18,6 +18,29 @@ TOPE = 200                      # el registro no crece sin limite
 PENDIENTE, REVISADO = "PENDIENTE", "REVISADO"
 
 
+AJUSTES = CARPETA / "ajustes.json"
+
+
+def ajuste(clave, defecto=None):
+    try:
+        return json.loads(AJUSTES.read_text(encoding="utf-8")).get(clave, defecto)
+    except Exception:
+        return defecto
+
+
+def poner_ajuste(clave, valor) -> None:
+    try:
+        datos = json.loads(AJUSTES.read_text(encoding="utf-8"))
+    except Exception:
+        datos = {}
+    datos[clave] = valor
+    try:
+        CARPETA.mkdir(parents=True, exist_ok=True)
+        AJUSTES.write_text(json.dumps(datos, ensure_ascii=False, indent=1), encoding="utf-8")
+    except Exception:
+        pass
+
+
 def cargar() -> list[dict]:
     try:
         datos = json.loads(FICHERO.read_text(encoding="utf-8"))

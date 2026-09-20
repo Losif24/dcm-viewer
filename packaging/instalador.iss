@@ -2,7 +2,7 @@
 ; Va todo dentro: el equipo de destino no necesita Python ni dependencias.
 
 #define Nombre     "DCM Viewer"
-#define Version    "1.0.0"
+#define Version    "1.1.0"
 #define Autor      "Jose Duran"
 #define Sitio      "https://github.com/Losif24/dcm-viewer"
 #define Ejecutable "DCM Viewer.exe"

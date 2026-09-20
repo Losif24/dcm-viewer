@@ -9,6 +9,7 @@ from pathlib import Path
 
 import flet as ft
 
+import actualizacion as act
 import dicomio as dio
 import entorno
 import exportar as expo
@@ -20,7 +21,8 @@ import registro as reg
 BG, CHROME, PANEL, ELEV = "#000000", "#181818", "#1E1E1E", "#262626"
 LINE, TXT, DIM, TINTA, ACC = "#333333", "#FFFFFF", "#9A9A9A", "#000000", "#FFFFFF"
 MONO = "Consolas"
-VERSION = "1.0.0"
+VERSION = "1.1.0"
+LLAVE_BRE_B = "@NEQUIJOS24501"
 
 TOPBAR, BOTBAR, ALTO = 36, 54, 26          # ALTO: todo lo interactivo de la barra mide igual
 ASIDE_MIN, ASIDE_MAX, ASIDE_DEF, DIVISOR = 160, 520, 232, 6
@@ -127,6 +129,7 @@ class Visor:
         self.maximizada = False
         self.escribiendo = False
         self.ruta_estudio = None
+        self.novedad = None            # la version publicada, si hay una mas nueva
         self.aside_w, self.aside_abierto, self.aside_auto = ASIDE_DEF, True, False
         self.ancho, self.alto = 1280.0, 800.0
         self.box = [1280.0 - ASIDE_DEF, 600.0]
@@ -210,6 +213,8 @@ class Visor:
                     self.hueco,
                     self.boton(ft.Icons.FORMAT_LIST_BULLETED, "Registro de estudios (Ctrl+L)",
                                self.dialogo_registro),
+                    self.boton(ft.Icons.FAVORITE_BORDER, "Apoyar el proyecto",
+                               self.dialogo_donar),
                     self.boton(ft.Icons.INFO_OUTLINE, "Estado del sistema (Ctrl+D)",
                                self.dialogo_entorno),
                     self.boton(ft.Icons.FILE_DOWNLOAD_OUTLINED, "Exportar secuencia (Ctrl+E)",
@@ -300,6 +305,11 @@ class Visor:
                               for v in (4, 8, 12, 15, 20, 24, 30)]
         self.lbl_estado = rotulo("sin estudio", 9, DIM, expand=True, no_wrap=True,
                                  overflow=ft.TextOverflow.ELLIPSIS)
+        self.btn_novedad = ft.TextButton(
+            visible=False, height=18, on_click=lambda e: self.dialogo_actualizar(),
+            style=ft.ButtonStyle(color=TINTA, bgcolor=ACC, padding=ft.padding.symmetric(0, 8),
+                                 shape=ft.RoundedRectangleBorder(radius=2),
+                                 text_style=ft.TextStyle(size=8, weight=ft.FontWeight.W_600)))
         self.lbl_px = rotulo("", 9, ACC, True)
         self.progreso = ft.ProgressBar(height=2, color=ACC, bgcolor=ELEV, visible=False)
         pie = ft.Container(
@@ -315,7 +325,7 @@ class Visor:
                     self.boton(ft.Icons.ZOOM_OUT, "Alejar", lambda e: self.escalar(1 / 1.25)),
                     self.boton(ft.Icons.ZOOM_IN, "Acercar", lambda e: self.escalar(1.25)),
                 ]),
-                ft.Row([self.lbl_estado, self.lbl_px],
+                ft.Row([self.lbl_estado, self.btn_novedad, self.lbl_px], spacing=8,
                        alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             ]),
         )
@@ -330,6 +340,8 @@ class Visor:
         threading.Thread(target=self.calentador, daemon=True).start()
         if len(sys.argv) > 1:                # se puede arrastrar la carpeta sobre el .bat
             self.abrir(sys.argv[1])
+        if reg.ajuste("avisar_actualizaciones", False):
+            threading.Thread(target=self.buscar_novedad, daemon=True).start()
 
     # --- piezas sueltas ---
     def titulo(self, t):
@@ -798,6 +810,137 @@ class Visor:
                 ultimo = (w, h)
                 self.medir(w, h)
 
+    # ------------------------------------------------------- actualizacion
+    def buscar_novedad(self, avisar_igual=False):
+        """Pregunta por la ultima version publicada. Es la unica salida a la red."""
+        info = act.ultima()
+        if info is None:
+            if avisar_igual:
+                self.estado("no se pudo comprobar: sin conexion o GitHub no responde")
+            return
+        if act.hay_mas_nueva(VERSION, info["version"]):
+            self.novedad = info
+            self.btn_novedad.text = f"ACTUALIZAR A {info['version']}"
+            self.btn_novedad.visible = True
+            self.page.update()
+        elif avisar_igual:
+            self.estado(f"ya tienes la ultima version ({VERSION})")
+
+    def dialogo_actualizar(self, e=None):
+        info = self.novedad
+        if not info:
+            return
+        notas = info["notas"][:600] + ("..." if len(info["notas"]) > 600 else "")
+        mb = info["tamanio"] / 1048576
+        self.up_prog = ft.ProgressBar(height=2, color=ACC, bgcolor=ELEV, value=0, visible=False)
+        self.up_estado = rotulo(f"instalada {VERSION}   ·   disponible {info['version']}"
+                                + (f"   ·   {mb:.0f} MB" if mb else ""), 9)
+        self.up_btn = ft.TextButton(
+            "ACTUALIZAR AHORA", on_click=self.lanzar_actualizacion,
+            disabled=not info["instalador"],
+            style=ft.ButtonStyle(color=TINTA, bgcolor=ACC, padding=ft.padding.symmetric(2, 14),
+                                 shape=ft.RoundedRectangleBorder(radius=3),
+                                 text_style=ft.TextStyle(size=10, weight=ft.FontWeight.W_600)))
+        self.dlg_up = ft.AlertDialog(
+            modal=True, bgcolor=PANEL, shape=ft.RoundedRectangleBorder(radius=4),
+            title=ft.Text(f"VERSION {info['version']} DISPONIBLE", size=11, color=TXT,
+                          weight=ft.FontWeight.W_600, style=ft.TextStyle(letter_spacing=1.2)),
+            title_padding=ft.padding.only(20, 14, 20, 6),
+            content_padding=ft.padding.symmetric(6, 20),
+            actions_padding=ft.padding.only(20, 0, 14, 10),
+            content=ft.Container(width=520, content=ft.Column(spacing=8, tight=True, controls=[
+                self.up_estado,
+                ft.Container(bgcolor=BG, border_radius=3, padding=10, height=190,
+                             content=ft.Column([ft.Text(notas or "sin notas", size=8.5,
+                                                        color=DIM, selectable=True)],
+                                               scroll=ft.ScrollMode.AUTO)),
+                self.up_prog,
+                rotulo("se descarga de la pagina de releases del proyecto y se instala "
+                       "encima; tus estudios y tus notas no se tocan", 8),
+            ])),
+            actions=[
+                ft.TextButton("Ver en GitHub",
+                              on_click=lambda ev: self.page.launch_url(info["pagina"]),
+                              style=ft.ButtonStyle(color=DIM, text_style=ft.TextStyle(size=10))),
+                ft.TextButton("Ahora no", on_click=lambda ev: self.page.close(self.dlg_up),
+                              style=ft.ButtonStyle(color=DIM, text_style=ft.TextStyle(size=10))),
+                self.up_btn,
+            ])
+        self.page.open(self.dlg_up)
+
+    def lanzar_actualizacion(self, e):
+        self.up_btn.disabled = True
+        self.up_prog.visible = True
+        self.up_estado.value = "descargando..."
+        self.page.update()
+        threading.Thread(target=self._actualizar, daemon=True).start()
+
+    def _actualizar(self):
+        def avance(hecho, total):
+            if total:
+                self.up_prog.value = hecho / total
+                self.up_estado.value = f"descargando... {hecho / 1048576:.0f} de {total / 1048576:.0f} MB"
+                self.page.update()
+        try:
+            ruta = act.descargar(self.novedad["instalador"], avance)
+            self.up_estado.value = "instalando: el visor se cerrara un momento"
+            self.page.update()
+            time.sleep(0.6)
+            act.instalar(ruta)
+        except SystemExit:
+            raise
+        except Exception as ex:
+            self.up_prog.visible = False
+            self.up_btn.disabled = False
+            self.up_estado.value = f"no se pudo actualizar: {ex}"
+            self.page.update()
+
+    # ----------------------------------------------------------- donacion
+    def dialogo_donar(self, e=None):
+        """Bre-B: se paga escribiendo la llave en la app del banco, sin cuentas ni datos."""
+        copiado = rotulo("", 8.5, ACC)
+
+        def copiar(ev):
+            self.page.set_clipboard(LLAVE_BRE_B)
+            copiado.value = "llave copiada"
+            copiado.update()
+
+        self.dlg_don = ft.AlertDialog(
+            modal=True, bgcolor=PANEL, shape=ft.RoundedRectangleBorder(radius=4),
+            title=ft.Text("APOYAR EL PROYECTO", size=11, color=TXT,
+                          weight=ft.FontWeight.W_600, style=ft.TextStyle(letter_spacing=1.2)),
+            title_padding=ft.padding.only(20, 14, 20, 6),
+            content_padding=ft.padding.symmetric(6, 20),
+            actions_padding=ft.padding.only(20, 0, 14, 10),
+            content=ft.Container(width=460, content=ft.Column(spacing=10, tight=True, controls=[
+                rotulo("El visor es gratis y de codigo abierto, y va a seguir siendolo. "
+                       "Si te ahorra trabajo, puedes echar una mano:", 9),
+                ft.Container(
+                    bgcolor=BG, border_radius=3, padding=ft.padding.symmetric(12, 14),
+                    border=ft.border.all(1, LINE),
+                    content=ft.Row(alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                                   vertical_alignment=ft.CrossAxisAlignment.CENTER, controls=[
+                        ft.Column(spacing=2, tight=True, controls=[
+                            rotulo("Bre-B  ·  llave", 8),
+                            ft.Text(LLAVE_BRE_B, size=17, color=TXT, font_family=MONO,
+                                    weight=ft.FontWeight.W_600, selectable=True)]),
+                        ft.TextButton("COPIAR", on_click=copiar, height=24,
+                                      style=ft.ButtonStyle(
+                                          color=TINTA, bgcolor=ACC,
+                                          padding=ft.padding.symmetric(0, 12),
+                                          shape=ft.RoundedRectangleBorder(radius=3),
+                                          text_style=ft.TextStyle(size=9,
+                                                                  weight=ft.FontWeight.W_600))),
+                    ])),
+                rotulo("En la app de tu banco: enviar dinero  ->  Bre-B  ->  pegar la llave. "
+                       "Funciona desde cualquier entidad del sistema.", 8.5),
+                copiado,
+            ])),
+            actions=[ft.TextButton("Cerrar", on_click=lambda ev: self.page.close(self.dlg_don),
+                                   style=ft.ButtonStyle(color=DIM,
+                                                        text_style=ft.TextStyle(size=10)))])
+        self.page.open(self.dlg_don)
+
     # ------------------------------------------------------------ sistema
     def dialogo_entorno(self, e=None):
         """Lo que hay en la maquina y lo que hace falta: sin sorpresas a media faena."""
@@ -827,6 +970,25 @@ class Visor:
 
         veredicto = ("todo lo necesario esta en su sitio" if not faltan
                      else f"faltan {faltan} piezas imprescindibles")
+
+        # actualizaciones: apagadas de fabrica, porque son lo unico que sale a la red
+        sw_avisar = ft.Switch(
+            value=bool(reg.ajuste("avisar_actualizaciones", False)), scale=0.55,
+            active_color=ACC,
+            on_change=lambda ev: reg.poner_ajuste("avisar_actualizaciones", ev.control.value))
+        btn_buscar = ft.TextButton(
+            "BUSCAR ACTUALIZACIONES", height=22,
+            on_click=lambda ev: (self.page.close(self.dlg_ent),
+                                 threading.Thread(target=self.buscar_novedad, args=(True,),
+                                                  daemon=True).start()),
+            style=ft.ButtonStyle(color=TXT, bgcolor=ELEV, padding=ft.padding.symmetric(0, 12),
+                                 shape=ft.RoundedRectangleBorder(radius=3),
+                                 text_style=ft.TextStyle(size=9, weight=ft.FontWeight.W_600)))
+        fila_act = ft.Row(alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                          vertical_alignment=ft.CrossAxisAlignment.CENTER, controls=[
+            ft.Row([btn_buscar, rotulo("no se manda ningun dato: solo se pregunta la "
+                                       "ultima version publicada", 8)], spacing=10),
+            ft.Row([rotulo("avisar al arrancar", 8.5), sw_avisar], spacing=0)])
         self.dlg_ent = ft.AlertDialog(
             modal=True, bgcolor=PANEL, shape=ft.RoundedRectangleBorder(radius=4),
             title=ft.Row(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, controls=[
@@ -840,6 +1002,8 @@ class Visor:
                 *equipo,
                 ft.Divider(height=9, color=LINE),
                 *[linea(f) for f in filas],
+                ft.Divider(height=9, color=LINE),
+                fila_act,
                 ft.Divider(height=9, color=LINE),
                 rotulo(f"{hay} de {len(filas)} componentes disponibles  ·  {veredicto}", 8.5),
             ])),

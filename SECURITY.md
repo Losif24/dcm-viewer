@@ -12,8 +12,11 @@ GitHub (*Security* → *Report a vulnerability*).
 Merece la pena que la conozcas antes de instalar nada en un equipo con datos
 de pacientes:
 
-- **Sin red.** El programa no abre sockets, no escucha en ningún puerto y no
-  llama a ningún servidor. Se puede usar en una máquina aislada.
+- **Sin red por defecto.** No escucha en ningún puerto ni acepta conexiones
+  entrantes, nunca. La única salida posible es la búsqueda de actualizaciones
+  —apagada de fábrica—: un GET por HTTPS a `api.github.com` y, si aceptas
+  actualizar, la descarga del instalador desde la propia página de releases.
+  Con el interruptor apagado se puede usar en una máquina aislada.
 - **Sin servicios ni tareas programadas.** Cuando lo cierras, no queda nada
   corriendo.
 - **Instalación por usuario.** No pide administrador. Toca su carpeta de
