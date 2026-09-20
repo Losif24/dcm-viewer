@@ -1,0 +1,10 @@
+flet>=0.28,<0.29
+pydicom>=3.0
+numpy>=1.26
+pillow>=10.0
+pylibjpeg
+pylibjpeg-libjpeg
+pylibjpeg-openjpeg
+python-gdcm            # descomprime JPEG sin perdida 4x mas rapido que pylibjpeg
+imageio>=2.34
+imageio-ffmpeg>=0.5

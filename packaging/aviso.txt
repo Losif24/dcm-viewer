@@ -1,0 +1,47 @@
+DCM VIEWER - ANTES DE INSTALAR
+
+QUE ES
+Un visor de estudios DICOM para Windows. Se instala completo: no necesita
+Python ni ninguna otra cosa en el equipo.
+
+
+PRIVACIDAD
+
+  * No envia nada por la red. Ni telemetria, ni informes de error, ni
+    actualizaciones automaticas. El programa no abre una sola conexion.
+
+  * Las imagenes no se copian a ningun sitio. Se leen de la carpeta que
+    usted abre y se quedan ahi.
+
+  * Los datos del paciente vienen ocultos por defecto en pantalla. El
+    interruptor "anonimo" del panel los muestra cuando usted lo decide.
+
+  * El registro de estudios (que carpetas ha abierto, con su fecha, estado
+    y sus notas) se guarda solo en este equipo, en:
+        %APPDATA%\DCM Viewer\registro.json
+    Al desinstalar se le preguntara si quiere borrarlo.
+
+  * Lo que exporta -PNG, GIF o MP4- contiene la imagen y nada mas: ninguna
+    etiqueta DICOM viaja dentro. Ojo: si el propio estudio lleva datos
+    "quemados" sobre la imagen, esos si salen en la exportacion.
+
+
+SEGURIDAD
+
+  * Codigo abierto con licencia MIT: puede leer y auditar todo lo que hace
+    en github.com/Losif24/dcm-viewer
+
+  * Se instala para su usuario, sin permisos de administrador y sin tocar
+    servicios ni el registro del sistema mas alla de su propia entrada de
+    desinstalacion.
+
+  * No incluye ningun componente que se ejecute en segundo plano cuando el
+    programa esta cerrado.
+
+
+ADVERTENCIA DE USO
+
+  Esto NO es un producto sanitario certificado. No esta aprobado por
+  ninguna agencia reguladora y no debe usarse como unica base para un
+  diagnostico ni para una decision clinica. Sirve para ver, revisar y
+  documentar estudios; el diagnostico se hace en una estacion homologada.
