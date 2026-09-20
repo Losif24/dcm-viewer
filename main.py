@@ -239,7 +239,7 @@ class Visor:
                 controls=[
                     ft.Icon(ft.Icons.IMAGE_SEARCH, size=38, color="#3A3A3A"),
                     rotulo("Abre la carpeta del estudio", 12, "#6E6E6E"),
-                    rotulo("rueda = corte     arrastrar = brillo/contraste     espacio = cine",
+                    rotulo("rueda para pasar cortes     arrastrar para el contraste     espacio para el cine",
                            9, "#4E4E4E"),
                 ],
             ),
@@ -855,8 +855,8 @@ class Visor:
                                                         color=DIM, selectable=True)],
                                                scroll=ft.ScrollMode.AUTO)),
                 self.up_prog,
-                rotulo("se descarga de la pagina de releases del proyecto y se instala "
-                       "encima; tus estudios y tus notas no se tocan", 8),
+                rotulo("lo baja de la pagina de releases y lo instala encima. Tus estudios "
+                       "y tus notas se quedan donde estan", 8),
             ])),
             actions=[
                 ft.TextButton("Ver en GitHub",
@@ -913,8 +913,8 @@ class Visor:
             content_padding=ft.padding.symmetric(6, 20),
             actions_padding=ft.padding.only(20, 0, 14, 10),
             content=ft.Container(width=460, content=ft.Column(spacing=10, tight=True, controls=[
-                rotulo("El visor es gratis y de codigo abierto, y va a seguir siendolo. "
-                       "Si te ahorra trabajo, puedes echar una mano:", 9),
+                rotulo("Es gratis y va a seguir siendolo. Si te saca de un apuro y quieres "
+                       "invitarme a un cafe:", 9),
                 ft.Container(
                     bgcolor=BG, border_radius=3, padding=ft.padding.symmetric(12, 14),
                     border=ft.border.all(1, LINE),
@@ -932,8 +932,8 @@ class Visor:
                                           text_style=ft.TextStyle(size=9,
                                                                   weight=ft.FontWeight.W_600))),
                     ])),
-                rotulo("En la app de tu banco: enviar dinero  ->  Bre-B  ->  pegar la llave. "
-                       "Funciona desde cualquier entidad del sistema.", 8.5),
+                rotulo("En tu banco: enviar dinero, Bre-B, pegar la llave. Vale desde "
+                       "cualquier entidad.", 8.5),
                 copiado,
             ])),
             actions=[ft.TextButton("Cerrar", on_click=lambda ev: self.page.close(self.dlg_don),
@@ -968,7 +968,7 @@ class Visor:
                          spacing=8)
                   for k, v in entorno.equipo()]
 
-        veredicto = ("todo lo necesario esta en su sitio" if not faltan
+        veredicto = ("no falta nada" if not faltan
                      else f"faltan {faltan} piezas imprescindibles")
 
         # actualizaciones: apagadas de fabrica, porque son lo unico que sale a la red
@@ -986,8 +986,8 @@ class Visor:
                                  text_style=ft.TextStyle(size=9, weight=ft.FontWeight.W_600)))
         fila_act = ft.Row(alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                           vertical_alignment=ft.CrossAxisAlignment.CENTER, controls=[
-            ft.Row([btn_buscar, rotulo("no se manda ningun dato: solo se pregunta la "
-                                       "ultima version publicada", 8)], spacing=10),
+            ft.Row([btn_buscar, rotulo("solo pregunta cual es la ultima version. "
+                                       "No manda ningun dato", 8)], spacing=10),
             ft.Row([rotulo("avisar al arrancar", 8.5), sw_avisar], spacing=0)])
         self.dlg_ent = ft.AlertDialog(
             modal=True, bgcolor=PANEL, shape=ft.RoundedRectangleBorder(radius=4),

@@ -9,7 +9,7 @@
 
 <table>
   <tr>
-    <td width="50%"><img src="packaging/escaparate/visor.png" alt="Visor con un fantoma Shepp-Logan"><p align="center"><sub><b>Recorriendo un estudio de 140 cortes</b></sub></p></td>
+    <td width="50%"><img src="packaging/escaparate/visor.png" alt="Visor con un estudio abierto"><p align="center"><sub><b>Recorriendo un estudio de 140 cortes</b></sub></p></td>
     <td width="50%"><img src="packaging/escaparate/registro.png" alt="Registro de estudios"><p align="center"><sub><b>Registro de estudios</b></sub></p></td>
   </tr>
   <tr>
@@ -23,30 +23,33 @@
 <details>
 <summary><b>In English</b></summary>
 
-**DCM Viewer** is a free, open source DICOM viewer for Windows. Point it at a
-study folder: it groups the series, sorts the slices by their real anatomical
-position, and lets you scroll, window/level by dragging, read Hounsfield values
-under the cursor, play cine and export the sequence to PNG, GIF or MP4.
-
-It ships as a self-contained installer — no Python, no dependencies, no
-administrator rights — and makes no network connection except an optional,
-opt-out-by-default update check. Not a certified medical device: not for
-diagnosis.
+A DICOM viewer for Windows. Open a study folder and it groups the series, sorts
+the slices by anatomical position and lets you scroll through them, set
+window/level by dragging, read Hounsfield values, play cine and export to PNG,
+GIF or MP4. The installer carries everything, so there is no Python to install
+and no administrator rights needed. It makes no network connection unless you
+turn on update checks, which are off by default. The interface is in Spanish.
+Not a certified medical device, so don't use it to diagnose.
 
 </details>
 
 # DCM Viewer
 
-Los cortes de un estudio, en orden y sin ceremonia.
+Un visor de estudios DICOM para Windows.
 
-Le señalas la carpeta de un estudio DICOM y lo abre: agrupa las series, ordena
-los cortes por su posición real —no por el nombre del archivo, que casi nunca
-coincide— y te deja recorrerlos con la rueda. Ventana y nivel arrastrando,
-como en cualquier estación. Hounsfield bajo el cursor. Cine. Y lo que estés
-viendo sale a PNG, GIF o MP4 sin salir del programa.
+Me pasaron un CBCT en una carpeta con 356 archivos `.dcm` y para verlo tenía dos
+opciones: instalar el software de la clínica o subirlo a alguna web. No me
+convencía ninguna, así que escribí esto.
 
-**No necesita Python.** El instalador lleva todo dentro, se instala sin
-permisos de administrador y no abre una sola conexión de red.
+Le das la carpeta y la abre. Agrupa las series, pone los cortes en orden (por su
+posición real, no por el nombre del archivo, que casi nunca coincide) y los
+recorres con la rueda. El brillo y el contraste se ajustan arrastrando sobre la
+imagen, como en las estaciones de verdad. Si dejas el cursor encima te dice
+cuántas Hounsfield hay ahí. Y si tienes que enseñarle el estudio a alguien, lo
+saca a PNG, GIF o MP4 sin salir del programa.
+
+El instalador lleva todo dentro. No hay que tener Python, no instala nada más y
+no pide permisos de administrador.
 
 ---
 
@@ -54,34 +57,34 @@ permisos de administrador y no abre una sola conexión de red.
 
 | | |
 |---|---|
-| Abre una carpeta y encuentra las series | agrupa por `SeriesInstanceUID` y ordena proyectando `ImagePositionPatient` sobre la normal del plano |
-| Recorre los cortes | rueda, flechas, barra, o cine con velocidad regulable |
-| Ventana y nivel | arrastrando sobre la imagen, o con los preajustes de siempre: cerebro, hueso, pulmón, mediastino, abdomen, hígado, angio |
-| Respeta lo que dejó el escáner | si el estudio trae un XML de análisis (CS 3D Imaging y compañía), usa **esa** ventana, no la del rango entero del equipo |
-| Dice el valor real | Hounsfield bajo el cursor, con el `RescaleSlope`/`Intercept` aplicado |
-| Exporta la secuencia | PNG numerados, GIF animado o MP4 (H.264), con rango de cortes, tamaño y velocidad |
-| Lleva un registro | qué estudios has abierto, en qué estado están y con qué nota |
-| Enseña las tripas | qué componentes hay en la máquina y cuáles faltan, antes de que algo falle a medias |
-| Se mantiene al día | avisa cuando hay versión nueva y se actualiza solo, si tú lo enciendes |
+| Encuentra las series | agrupa por `SeriesInstanceUID` y ordena proyectando `ImagePositionPatient` sobre la normal del plano, que es lo que funciona también en adquisiciones oblicuas |
+| Recorre los cortes | rueda, flechas, barra o cine |
+| Brillo y contraste | arrastrando, o con los preajustes de siempre: cerebro, hueso, pulmón, mediastino, abdomen, hígado, angio |
+| Usa la ventana del escáner | si el estudio trae su XML de análisis, coge esa en vez del rango entero del equipo |
+| Mide | Hounsfield bajo el cursor, ya con el rescale aplicado |
+| Exporta | PNG numerados, GIF o MP4, eligiendo rango de cortes, tamaño y velocidad |
+| Recuerda | los estudios que has abierto, con su estado y tus notas |
+| Se revisa a sí mismo | una pantalla dice qué componentes hay y cuáles faltan |
+| Se actualiza | si lo enciendes, avisa de versiones nuevas y se instala encima |
 
-Los datos del paciente vienen **ocultos por defecto**. El interruptor del panel
-los muestra cuando hace falta.
+Los datos del paciente salen ocultos. Hay un interruptor en el panel para
+mostrarlos cuando haga falta.
 
 ---
 
 ## Instalar
 
-Descarga el instalador de [releases](https://github.com/Losif24/dcm-viewer/releases/latest)
-y ábrelo. No pide administrador y no hace falta tener Python.
+Bájate el instalador de [releases](https://github.com/Losif24/dcm-viewer/releases/latest)
+y ábrelo.
 
-O desde el código:
+Si prefieres el código:
 
 ```bash
 pip install -r requirements.txt
 python main.py                       # o: python main.py C:\ruta\al\estudio
 ```
 
-También puedes arrastrar la carpeta del estudio sobre `DCM Viewer.bat`.
+Arrastrar la carpeta del estudio sobre `DCM Viewer.bat` también vale.
 
 ---
 
@@ -89,83 +92,79 @@ También puedes arrastrar la carpeta del estudio sobre `DCM Viewer.bat`.
 
 | | |
 |---|---|
-| rueda, `←` `→`, `Inicio` `Fin` | moverse por los cortes |
-| arrastrar sobre la imagen | ventana y nivel |
+| rueda, `←` `→`, `Inicio` `Fin` | cortes |
+| arrastrar | brillo y contraste |
 | `espacio` | cine |
-| `i` · `m` · `r` | invertir · mover · ajustar |
+| `i` · `m` · `r` | invertir, mover, ajustar |
 | `+` `-` | zoom |
-| `p` | panel lateral |
-| `Ctrl+E` · `Ctrl+L` · `Ctrl+D` | exportar · registro · estado del sistema |
+| `p` | panel |
+| `Ctrl+E` · `Ctrl+L` · `Ctrl+D` | exportar, registro, estado del sistema |
 
 ---
 
 ## Formatos
 
-Cualquier DICOM con imagen que `pydicom` sepa leer: sin comprimir, RLE, JPEG
-sin pérdida, JPEG 2000. Series de un archivo por corte y multiframe. Probado
-con TAC, CBCT dental y ecografía en color.
+Lo que sepa leer `pydicom`: sin comprimir, RLE, JPEG sin pérdida y JPEG 2000.
+Da igual un archivo por corte que multiframe. Lo he probado con TAC, con CBCT
+dental y con ecografía en color.
 
-La descompresión va por **GDCM**, que en un JPEG sin pérdida es unas cuatro
-veces más rápido que la alternativa; si no está, cae a `pylibjpeg` sin
-enterarse nadie. En un CBCT de 356 cortes a 545×545 eso son 23 ms por corte en
-vez de 90, y con la precarga por delante el cine se sostiene por encima de los
-30 fps.
+Para descomprimir tira de GDCM, que en JPEG sin pérdida va bastante más rápido
+que pylibjpeg: 23 ms por corte contra 90 en el CBCT con el que hice las pruebas,
+356 cortes de 545×545. Si GDCM no está, usa pylibjpeg y no pasa nada. Hay un
+hilo que va descomprimiendo por delante del corte que estás mirando, que es por
+lo que el cine no se atasca.
 
 ---
 
 ## Privacidad
 
-- No hay red, con **una sola excepción**: buscar actualizaciones. Viene
-  apagado; se enciende en *Estado del sistema* (`Ctrl+D`) y lo único que hace
-  es preguntar a GitHub cuál es la última versión publicada. Nunca manda datos.
-- Ni telemetría, ni informes de error, ni analítica.
-- Las imágenes se leen donde están; no se copian a ningún sitio.
-- El registro (carpetas abiertas, fechas, notas) se queda en
-  `%APPDATA%\DCM Viewer\registro.json`, y al desinstalar se pregunta si se borra.
-- Lo exportado lleva la imagen y nada más: ninguna etiqueta DICOM viaja dentro.
+No manda nada a ningún sitio. La única excepción es buscar actualizaciones, y
+viene apagado: si lo enciendes, le pregunta a GitHub cuál es la última versión y
+ya está, sin enviar ningún dato tuyo.
 
-Detalle completo en [PRIVACIDAD.md](PRIVACIDAD.md) y [SECURITY.md](SECURITY.md).
+Las imágenes se leen donde están y no se copian. El registro de estudios (rutas,
+fechas, tus notas) se queda en `%APPDATA%\DCM Viewer\registro.json`, y al
+desinstalar te pregunta si lo borra. Lo que exportas lleva la imagen y nada más:
+ninguna etiqueta DICOM va dentro.
 
-> **Esto no es un producto sanitario certificado.** No está aprobado por
-> ninguna agencia y no debe ser la única base de un diagnóstico. Sirve para
-> ver, revisar y documentar; el diagnóstico se hace en una estación homologada.
+Más detalle en [PRIVACIDAD.md](PRIVACIDAD.md) y [SECURITY.md](SECURITY.md).
+
+> Esto no es un producto sanitario certificado ni está aprobado por ninguna
+> agencia. No lo uses para diagnosticar.
 
 ---
 
-## Preguntas frecuentes
+## Preguntas que me han hecho
 
-**¿Cómo abro un archivo .dcm?** Abre la carpeta entera del estudio, no un
-archivo suelto: un estudio son cientos de archivos y el visor necesita verlos
-todos para ordenarlos. Arrastra la carpeta sobre el icono, o pega su ruta.
+**¿Abro un `.dcm` suelto?** Mejor la carpeta entera. Un estudio son cientos de
+archivos y el visor los necesita todos para ordenarlos.
 
-**¿Sirve para un CBCT dental?** Sí. Está probado con estudios de Carestream
-CS 3D Imaging, incluidos los comprimidos en JPEG sin pérdida, y usa la ventana
-que el propio programa del escáner dejó guardada.
+**¿Vale para un CBCT dental?** Sí, es con lo que lo probé. Además lee la ventana
+que dejó guardada el programa del escáner.
 
-**¿Necesito Python?** No, si usas el instalador. Va todo dentro.
+**¿Hace falta Python?** Con el instalador no.
 
-**¿Funciona sin internet?** Sí, siempre. La única función que usa la red es
-buscar actualizaciones, y viene apagada.
+**¿Funciona sin internet?** Siempre. Lo único que usa la red son las
+actualizaciones, y vienen apagadas.
 
-**¿Puedo convertir un estudio en un vídeo?** Sí: `Ctrl+E`, eliges MP4, el rango
-de cortes y la velocidad.
+**¿Puedo sacar un vídeo del estudio?** `Ctrl+E`, eliges MP4 y el rango de
+cortes.
 
-**¿Sirve para diagnosticar?** No. No es un producto sanitario certificado.
+**¿Sirve para diagnosticar?** No.
 
 ---
 
 ## Apoyar el proyecto
 
-El visor es gratis y de código abierto, y va a seguir siéndolo. Si te ahorra
-trabajo y quieres echar una mano:
+Es gratis y va a seguir siéndolo. Si te saca de un apuro y quieres invitarme a
+un café:
 
 | | |
 |---|---|
 | **Bre-B** | `@NEQUIJOS24501` |
 
-En la app de tu banco: enviar dinero → Bre-B → pegar la llave. Funciona desde
-cualquier entidad del sistema. También ayuda una estrella en el repositorio o
-un issue bien escrito.
+En tu banco: enviar dinero, Bre-B, pegar la llave. Una estrella en el repo
+también se agradece.
 
 ---
 
@@ -173,20 +172,20 @@ un issue bien escrito.
 
 | Archivo | Qué es |
 |---|---|
-| `main.py` | la interfaz entera: barra, lienzo, panel, diálogos |
-| `dicomio.py` | indexado, orden, caché de cortes y render a PNG |
+| `main.py` | la interfaz: barra, lienzo, panel, diálogos |
+| `dicomio.py` | indexado, orden, caché de cortes y render |
 | `exportar.py` | PNG, GIF y MP4 |
-| `registro.py` | el registro de estudios en disco |
+| `registro.py` | el registro de estudios |
 | `entorno.py` | qué hay instalado y qué falta |
-| `actualizacion.py` | buscar y aplicar versiones nuevas |
-| `packaging/` | el empaquetado y el instalador |
+| `actualizacion.py` | versiones nuevas |
+| `packaging/` | empaquetado e instalador |
 
-Para compilar el instalador hacen falta [Inno Setup 6](https://jrsoftware.org/isdl.php)
-y PyInstaller; después, `packaging\construir.bat` deja el `.exe` en
-`packaging\salida`.
+Para armar el instalador hacen falta PyInstaller e
+[Inno Setup 6](https://jrsoftware.org/isdl.php). Con eso,
+`packaging\construir.bat` deja el `.exe` en `packaging\salida`.
 
 ---
 
 ## Licencia
 
-MIT. Haz lo que quieras con él.
+MIT.

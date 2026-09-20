@@ -1,51 +1,43 @@
-DCM VIEWER - ANTES DE INSTALAR
+DCM VIEWER
 
-QUE ES
-Un visor de estudios DICOM para Windows. Se instala completo: no necesita
-Python ni ninguna otra cosa en el equipo.
+Un visor de estudios DICOM. Se instala completo: no necesita Python ni ninguna
+otra cosa en el equipo.
 
 
 PRIVACIDAD
 
-  * No envia nada por la red: ni telemetria, ni informes de error, ni
-    analitica.
+  No manda nada por la red. Sin telemetria, sin informes de error, sin
+  analitica.
 
-  * Puede avisar de versiones nuevas, pero viene APAGADO. Si lo enciende,
-    lo unico que hace es preguntar a GitHub cual es la ultima version
-    publicada; no manda ningun dato suyo.
+  Puede avisar de versiones nuevas, pero viene apagado. Si lo enciende, lo
+  unico que hace es preguntarle a GitHub cual es la ultima version publicada.
 
-  * Las imagenes no se copian a ningun sitio. Se leen de la carpeta que
-    usted abre y se quedan ahi.
+  Las imagenes se leen de la carpeta que usted abre y se quedan ahi. No se
+  copian a ningun sitio.
 
-  * Los datos del paciente vienen ocultos por defecto en pantalla. El
-    interruptor "anonimo" del panel los muestra cuando usted lo decide.
+  Los datos del paciente salen ocultos en pantalla. Hay un interruptor para
+  mostrarlos cuando haga falta.
 
-  * El registro de estudios (que carpetas ha abierto, con su fecha, estado
-    y sus notas) se guarda solo en este equipo, en:
-        %APPDATA%\DCM Viewer\registro.json
-    Al desinstalar se le preguntara si quiere borrarlo.
+  La lista de estudios que ha abierto, con sus fechas y sus notas, se guarda
+  solo en este equipo, en %APPDATA%\DCM Viewer. Al desinstalar se le pregunta
+  si quiere borrarla.
 
-  * Lo que exporta -PNG, GIF o MP4- contiene la imagen y nada mas: ninguna
-    etiqueta DICOM viaja dentro. Ojo: si el propio estudio lleva datos
-    "quemados" sobre la imagen, esos si salen en la exportacion.
+  Lo que exporte (PNG, GIF o MP4) lleva la imagen y nada mas: ninguna etiqueta
+  DICOM va dentro. Eso si, si el estudio trae datos escritos encima de la
+  propia imagen, esos salen como cualquier otro pixel.
 
 
 SEGURIDAD
 
-  * Codigo abierto con licencia MIT: puede leer y auditar todo lo que hace
-    en github.com/Losif24/dcm-viewer
+  El codigo esta publicado con licencia MIT en
+  github.com/Losif24/dcm-viewer, por si quiere revisar lo que hace.
 
-  * Se instala para su usuario, sin permisos de administrador y sin tocar
-    servicios ni el registro del sistema mas alla de su propia entrada de
-    desinstalacion.
-
-  * No incluye ningun componente que se ejecute en segundo plano cuando el
-    programa esta cerrado.
+  Se instala para su usuario, sin permisos de administrador, y no deja nada
+  corriendo en segundo plano cuando cierra el programa.
 
 
-ADVERTENCIA DE USO
+ANTES DE SEGUIR
 
-  Esto NO es un producto sanitario certificado. No esta aprobado por
-  ninguna agencia reguladora y no debe usarse como unica base para un
-  diagnostico ni para una decision clinica. Sirve para ver, revisar y
-  documentar estudios; el diagnostico se hace en una estacion homologada.
+  Esto no es un producto sanitario certificado. No esta aprobado por ninguna
+  agencia y no debe usarse como unica base de un diagnostico. Sirve para ver,
+  revisar y documentar estudios.
